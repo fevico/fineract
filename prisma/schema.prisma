@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+  moduleFormat = "commonjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  password     String
+  email        String?
+  firstname    String
+  lastname     String
+  officeId     Int      @default(1)
+  staffId      Int?
+  roles        Json     @default("[]")
+  permissions  Json     @default("[]")
+  isSelfServiceUser Boolean @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Office {
+  id           Int      @id @default(autoincrement())
+  name         String
+  nameDecorated String?
+  externalId   String?
+  openingDate  Json?
+  hierarchy    String   @default(".")
+  parentId     Int?
+  createdAt    DateTime @default(now())
+
+  @@map("offices")
+}
+
+model Client {
+  id              Int      @id @default(autoincrement())
+  accountNo       String   @unique
+  status          Json
+  active          Boolean  @default(true)
+  activationDate  Json?
+  firstname       String?
+  lastname        String?
+  displayName     String
+  gender          Json?
+  officeId        Int      @default(1)
+  officeName      String?
+  staffId         Int?
+  staffName       String?
+  timeline        Json?
+  fullname        String?
+  imagePresent    Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  loans         Loan[]
+  savingsAccounts SavingsAccount[]
+
+  @@map("clients")
+}
+
+model Loan {
+  id              Int      @id @default(autoincrement())
+  accountNo       String   @unique
+  status          Json
+  clientId        Int
+  clientName      String?
+  clientAccountNo String?
+  loanProductId   Int?
+  loanProductName String?
+  loanType        Json?
+  currency        Json?
+  principal       Float    @default(0)
+  termFrequency   Int?
+  timeline        Json?
+  summary         Json?
+  repaymentSchedule Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  client Client @relation(fields: [clientId], references: [id])
+
+  @@map("loans")
+}
+
+model SavingsAccount {
+  id              Int      @id @default(autoincrement())
+  accountNo       String   @unique
+  status          Json
+  clientId        Int
+  clientName      String?
+  savingsProductId Int?
+  savingsProductName String?
+  currency        Json?
+  accountBalance  Float    @default(0)
+  timeline        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  client Client @relation(fields: [clientId], references: [id])
+
+  @@map("savings_accounts")
+}
+
+model LoanProduct {
+  id          Int    @id @default(autoincrement())
+  name        String
+  shortName   String
+  description String?
+  currency    Json?
+  principal   Float  @default(0)
+  createdAt   DateTime @default(now())
+
+  @@map("loan_products")
+}
