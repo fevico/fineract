@@ -33,7 +33,7 @@ export class AuthController {
           password = decoded.substring(colonIndex + 1);
         }
         // 2. JSON body
-        else if (body?.username) {
+        else if (body?.username) { 
           username = body.username;
           password = body.password;
         }
