@@ -8,12 +8,13 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    AuthModule,
+    AuthModule, 
     PrismaModule,
     OfficeModule,
     LoanModule,
     AccountingModule,
-    ClientModule
+    ClientModule,
+    JournalModule
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -56,6 +57,7 @@ import { OfficeModule } from './office/office.module';
 import { LoanModule } from './loan/loan.module';
 import { AccountingModule } from './accounting/accounting.module';
 import { ClientModule } from './client/client.module';
+import { JournalModule } from './journal/journal.module';
 
 // @Module({
 //   imports: [
