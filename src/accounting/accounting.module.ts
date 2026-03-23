@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AccountingService } from './accounting.service';
-import { AccountingController } from './accounting.controller';
+import { GlAccountController } from './accounting.controller';
 
 @Module({
   providers: [AccountingService],
-  controllers: [AccountingController]
+  controllers: [GlAccountController]
 })
 export class AccountingModule {}
